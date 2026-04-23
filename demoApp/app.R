@@ -20,18 +20,17 @@ ui <- fluidPage( #create the overall page
     
     # Some helpful information
     helpText("This application creates a violin plot to show difference between",
-             "iris species.  Please use the radio box below to choose a trait",
+             "iris species.  Please use the radio box below to choose a species",
              "for plotting"),
     
     # Sidebar with a radio box to input which trait will be plotted
     sidebarLayout(
       sidebarPanel(
-        radioButtons("trait", #the input variable that the value will go into
-                     "Choose a trait to display:",
-                     c("Sepal.Length",
-                       "Sepal.Width",
-                       "Petal.Length",
-                       "Petal.Width")
+        radioButtons("Species", #the input variable that the value will go into
+                     "Choose a species to display:",
+                     c("setosa",
+                       "versicolor",
+                       "virginica")
         )),
       
       # Show a plot of the generated distribution
@@ -54,18 +53,12 @@ server <- function(input, output) {
   
   output$boxPlot <- renderPlot({
     
-    plotTrait <- as.name(input$trait) # convert string to name
+    plotSpecies <- as.name(input$Species) # convert string to name
     
     # set up the plot
-    pl <- ggplot(data = iris,
-                 aes(x=Species,
-                     y= !! plotTrait, # !! to use the column names contained in plotTrait
-                     fill=Species
-                 )
-    )
-    
-    # draw the boxplot for the specified trait
-    pl + geom_violin()
+    iris.long%>%
+      filter(Species == plotSpecies)%>%
+      ggplot(aes(x= trait, y= number, fill = trait)) + geom_violin()
   })
 }
 
