@@ -12,6 +12,12 @@ library(tidyverse)
 
 data(iris)
 
+iris.long<-iris%>%
+  pivot_longer(c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),
+               names_to = "trait",
+               values_to = "number")
+
+
 # Define UI for application that draws a box plot
 ui <- fluidPage( #create the overall page
     
