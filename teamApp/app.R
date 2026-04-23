@@ -8,7 +8,7 @@ tomato <- read_csv("Tomato.csv")
 tomato.long <- tomato[c("species", "totleng", "petleng", "leafleng", "leafwid", "leafnum")] %>%
   pivot_longer(c(totleng, petleng, leafleng, leafwid, leafnum),
                names_to = "trait",
-               values_to = "number"
+               values_to = "value"
   )
 
 data(tomato.long)
@@ -19,6 +19,8 @@ ui <- fluidPage( #create the overall page
   
     titlePanel("Tomatooooo"),
     
+    helpText("This application creates a violin plot to visualize the distribution of the data collected for different traits in different tomato plants."),
+    
     sidebarLayout(
       sidebarPanel(
         selectInput("Species","Choose a Species:",
@@ -28,7 +30,7 @@ ui <- fluidPage( #create the overall page
                      c("totleng",
                      "petleng",
                      "leafleng",
-                     "leafwid ",
+                     "leafwid",
                      "leafnum")),
     ),
     
@@ -38,7 +40,20 @@ ui <- fluidPage( #create the overall page
   )
 # Define server logic 
 server <- function(input, output) {
-  # server code here
+  # Expression that generates a violin plot
+  output$violinPlot <- renderPlot({
+    plotSpecies <- as.name(input$Species)
+    plotTrait <- as.name(input$trait)
+   
+     # Set up the plot
+    tomato.long %>%
+      filter(species == plotSpecies) %>%
+      filter(trait == plotTrait )%>%
+      ggplot(
+        aes(x= trait, y= value, fill=trait)
+      ) +
+      geom_violin()
+  })
   
 }
 
