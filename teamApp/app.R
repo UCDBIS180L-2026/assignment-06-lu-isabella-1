@@ -1,4 +1,5 @@
 library(shiny)
+library(tidyverse)
 # other libraries here
 
 # data loading and one-time processing here
