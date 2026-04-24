@@ -6,5 +6,5 @@ Add the URL to launch your app below:
 
 [Click here to launch our shiny app](https://isabellajwong.shinyapps.io/teamapp/)
 
-This app was developed by: 
+This app was developed by: Lu Liang and Isabella Wong
 
